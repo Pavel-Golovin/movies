@@ -4,3 +4,19 @@
   max-width: 1053px;
   min-height: 100vh;
 }
+
+.ant-spin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+}
+
+.ant-spin .ant-spin-dot {
+  font-size: 110px;
+}
+
+.ant-spin-text {
+  margin-top: 20px;
+}
