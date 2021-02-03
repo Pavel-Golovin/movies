@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Spin} from "antd";
+import {Spin, Alert} from "antd";
 import 'antd/dist/antd.css';
 import ApiServices from '../../services/api-services';
 import MoviesList from "../movies-list";
@@ -16,7 +16,15 @@ export default class App extends Component {
   
   state = {
     moviesList: [],
-    isLoading: true
+    isLoading: true,
+    isError: false
+  }
+  
+  onError = () => {
+    this.setState({
+      isLoading: false,
+      isError: true
+    });
   }
   
   onMoviesLoaded = (movies) => {
@@ -27,25 +35,27 @@ export default class App extends Component {
   }
   
   updateMovies = () => {
-    this.apiServices.getMoviesBySearch("return").then(this.onMoviesLoaded);
+    this.apiServices.getMoviesBySearch("return").then(this.onMoviesLoaded).catch(this.onError);
   }
 
 
   render() {
     
-    const {moviesList, isLoading} = this.state;
+    const {moviesList, isLoading, isError} = this.state;
     
+    const hasData = !isLoading && !isError;
+    
+    const errorMessage = isError ? <Alert type="error" message="Error" description="The movie can not be uploaded" showIcon/> : null
     const spinner = isLoading ? <Spin tip="Loading... Please wait" size="large"/> : null
-    const content = !isLoading ? <MoviesList moviesList={moviesList} /> : null
+    const content = hasData ? <MoviesList moviesList={moviesList} /> : null
     
     return (
       <div className="app">
         <h1 className="visually-hidden">Movies App</h1>
         {spinner}
+        {errorMessage}
         {content}
       </div>
     );
   }
-  
 }
-

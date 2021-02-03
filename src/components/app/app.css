@@ -1,8 +1,26 @@
 .app {
+  display: flex;
   margin: auto;
   background-color: white;
   max-width: 1053px;
   min-height: 100vh;
+}
+
+.ant-alert {
+  margin: auto;
+  border: 5px solid darkgreen;
+  width: 500px;
+}
+
+.ant-alert .ant-alert-message {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.ant-alert .ant-alert-description {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: bolder;
 }
 
 .ant-spin {

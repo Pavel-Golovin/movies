@@ -7,9 +7,6 @@ const MoviesList = (props) => { // eslint-disable-line arrow-body-style
   
   const { moviesList } = props;
   
-  // eslint-disable-next-line no-console
-  console.log(moviesList)
-  
   // eslint-disable-next-line no-unused-vars
   const elements = moviesList.map(({id, title, poster_path: posterPath, release_date: releaseDate, overview}) => (
       <li className="movies__item" key={id}>
