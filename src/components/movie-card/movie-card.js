@@ -1,6 +1,7 @@
 import {format} from "date-fns";
 import React from "react";
 import PropTypes from "prop-types";
+import './movie-card.css';
 
 const MovieCard = (props) => {
   
@@ -23,7 +24,7 @@ const MovieCard = (props) => {
   return (
     <article className="film-card">
       <div className="film-card__poster">
-        <img className="film-card__poster-img" src={`https://image.tmdb.org/t/p/w185${posterPath}`} alt="This is poster"/>
+        <img className="film-card__poster" src={`https://image.tmdb.org/t/p/w185${posterPath}`} alt="This is poster"/>
       </div>
       <div className="film-card__info">
         <div className="film-card__rating">
