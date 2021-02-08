@@ -1,9 +1,13 @@
 .app {
   display: flex;
+  flex-direction: column;
   margin: auto;
   background-color: white;
-  max-width: 1053px;
+  min-width: 420px;
+  max-width: 1010px;
   min-height: 100vh;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
 .ant-alert {
@@ -37,4 +41,18 @@
 
 .ant-spin-text {
   margin-top: 20px;
+}
+
+@media screen and (max-width: 480px) {
+  .app {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media screen and (max-width: 421px) {
+  .app {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }

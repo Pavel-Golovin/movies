@@ -1,47 +1,10 @@
 .app__list {
-    padding: 21px 0 0 35px;
+    padding: 21px 0 0 0px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
-.film-card {
-    width: 454px;
-    height: 281px;
-    box-shadow: 4px 4px 11px -1px rgba(34, 60, 80, 0.2);
-    display: flex;
-    padding-right: 20px;
+.movies__item {
     margin-bottom: 35px;
-    margin-right: 35px;
-}
-
-.film-card__poster {
-    margin-right: 20px;
-}
-
-.film-card__genre {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.65);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.film-card__genre-item {
-    margin-right: 8px;
-    margin-bottom: 8px;
-    padding: 1px 3px;
-    background: #FAFAFA;
-    border: 1px solid #D9D9D9;
-    border-radius: 2px;
-}
-
-.film-card__annotation {
-    margin: 0;
-}
-
-.film-card__poster-img {
-    width: 187px;
 }
