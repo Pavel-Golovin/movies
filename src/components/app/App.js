@@ -3,6 +3,7 @@ import {Spin, Alert} from "antd";
 import 'antd/dist/antd.css';
 import ApiServices from '../../services/api-services';
 import MoviesList from "../movies-list";
+import Search from "../search/search";
 import './app.css';
 
 export default class App extends Component {
@@ -38,7 +39,6 @@ export default class App extends Component {
     this.apiServices.getMoviesBySearch("return").then(this.onMoviesLoaded).catch(this.onError);
   }
 
-
   render() {
     
     const {moviesList, isLoading, isError} = this.state;
@@ -52,6 +52,7 @@ export default class App extends Component {
     return (
       <div className="app">
         <h1 className="visually-hidden">Movies App</h1>
+        <Search />
         {spinner}
         {errorMessage}
         {content}
