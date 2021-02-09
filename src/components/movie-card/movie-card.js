@@ -2,6 +2,7 @@ import {format} from "date-fns";
 import React from "react";
 import PropTypes from "prop-types";
 import './movie-card.css';
+import noPoster from "../../images/no-poster.png";
 
 const MovieCard = (props) => {
   
@@ -17,21 +18,22 @@ const MovieCard = (props) => {
     }
   }
   
-  const { releaseDate, title, posterPath, overview } = props;
+  const {releaseDate, title, posterPath, overview } = props;
   
-  const date = new Date(releaseDate);
+  const formattedReleaseDate = (releaseDate) ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
+  const posterImg = (posterPath) ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
   
   return (
     <article className="film-card">
       <div className="film-card__poster">
-        <img className="film-card__poster" src={`https://image.tmdb.org/t/p/w185${posterPath}`} alt="This is poster"/>
+        <img className="film-card__poster-img" src={posterImg} alt="This is poster"/>
       </div>
       <div className="film-card__info">
         <div className="film-card__rating">
           <h2 className="film-card__title">{title}</h2>
         </div>
         
-        <p className="film-card__release">{format(date, 'PP')}</p>
+        <p className="film-card__release">{formattedReleaseDate}</p>
         
         <ul className="film-card__genre">
           <li className="film-card__genre-item">

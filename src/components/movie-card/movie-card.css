@@ -35,18 +35,22 @@
     margin: 0;
 }
 
+.film-card__release {
+    min-height: 24px;
+}
+
 .film-card__poster-img {
     width: 187px;
 }
 
 @media screen and (max-width: 995px) {
   .film-card {
-    width: auto;
+    width: 100%;
   }
 }
 
 @media screen and (max-width: 421px) {
-    .film-card__poster {
+    .film-card__poster-img {
       position: absolute;
         width: 60px;
         height: 91px;

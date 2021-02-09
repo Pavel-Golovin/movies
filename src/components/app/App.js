@@ -10,15 +10,11 @@ export default class App extends Component {
   
   apiServices = new ApiServices();
   
-  constructor() {
-    super();
-    this.updateMovies();
-  }
-  
   state = {
     moviesList: [],
-    isLoading: true,
-    isError: false
+    isLoading: false,
+    isError: false,
+    hasData: false
   }
   
   onError = () => {
@@ -31,28 +27,47 @@ export default class App extends Component {
   onMoviesLoaded = (movies) => {
     this.setState({
       moviesList: movies.results,
-      isLoading: false
+      isLoading: false,
+      hasData: true
     })
   }
   
-  updateMovies = () => {
-    this.apiServices.getMoviesBySearch("return").then(this.onMoviesLoaded).catch(this.onError);
+  updateMovies = (query) => {
+    this.apiServices.getMoviesBySearch(query).then(this.onMoviesLoaded).catch(this.onError);
+  }
+  
+  onSearchHandler = (query) => {
+    if (query === "") {
+      this.setState({
+        isLoading: false,
+        isError: false,
+        hasData: false
+      })
+    } else {
+      this.setState({
+        isLoading: true,
+        isError: false
+      })
+      this.updateMovies(query);
+    }
   }
 
   render() {
     
-    const {moviesList, isLoading, isError} = this.state;
+    const {moviesList, isLoading, isError, hasData} = this.state;
     
-    const hasData = !isLoading && !isError;
+    const isValidData = hasData && !isLoading && !isError;
     
     const errorMessage = isError ? <Alert type="error" message="Error" description="The movie can not be uploaded" showIcon/> : null
     const spinner = isLoading ? <Spin tip="Loading... Please wait" size="large"/> : null
-    const content = hasData ? <MoviesList moviesList={moviesList} /> : null
+    const content = (isValidData) ? <MoviesList moviesList={moviesList} /> : null
     
     return (
       <div className="app">
         <h1 className="visually-hidden">Movies App</h1>
-        <Search />
+        <Search
+          onSearch={this.onSearchHandler}
+        />
         {spinner}
         {errorMessage}
         {content}

@@ -1,27 +1,39 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types';
 
 export default class Search extends Component {
   
   state = {
-    text: ""
+    value: ""
   }
   
-  onSearchChange = () => {
-    console.log("onSearchChange()")
+  onSearchChange = (evt) => {
+    const {value} = evt.target;
+    const {onSearch} = this.props;
+    this.setState({value});
+    onSearch(value);
   }
   
   render() {
     
-    const { text } = this.state
+    const { value } = this.state
     
     return (
       <input
         className="search"
         type="text"
         placeholder="Type to search..."
-        value={text}
+        value={value}
         onChange={this.onSearchChange}
       />
     );
   }
 };
+
+Search.defaultProps = {
+  onSearch: () => {}
+}
+
+Search.propTypes = {
+  onSearch: PropTypes.func
+}
