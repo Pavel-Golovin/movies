@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Spin, Alert} from "antd";
+import {Spin, Alert, Pagination} from "antd";
 import { debounce } from 'lodash';
 import 'antd/dist/antd.css';
 import ApiServices from '../../services/api-services';
@@ -15,7 +15,10 @@ export default class App extends Component {
     moviesList: [],
     isLoading: false,
     isError: false,
-    hasData: false
+    hasData: false,
+    page: null,
+    search: null,
+    totalResults: null
   }
   
   onError = () => {
@@ -25,11 +28,13 @@ export default class App extends Component {
     });
   }
   
-  onMoviesLoaded = (movies) => {
+  onMoviesLoaded = ({results, page, total_results: totalResults}) => {
     this.setState({
-      moviesList: movies.results,
+      moviesList: results,
       isLoading: false,
-      hasData: true
+      hasData: true,
+      page,
+      totalResults
     })
   }
   
@@ -43,19 +48,31 @@ export default class App extends Component {
     } else {
       this.setState({
         isLoading: true,
-        isError: false
+        isError: false,
+        search: query
       })
       this.updateMovies(query);
     }
   }, 500);
   
-  updateMovies = (query) => {
-    this.apiServices.getMoviesBySearch(query).then(this.onMoviesLoaded).catch(this.onError);
+  onPaginationChange = (page) => {
+    const { search } = this.state;
+    this.setState({
+      isLoading: true,
+      isError: false,
+      page
+    })
+  
+    this.updateMovies(search, page)
+  }
+  
+  updateMovies = (query, page = 1) => {
+    this.apiServices.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   }
 
   render() {
     
-    const {moviesList, isLoading, isError, hasData} = this.state;
+    const {moviesList, isLoading, isError, hasData, page, totalResults} = this.state;
     
     const isValidData = hasData && !isLoading && !isError;
     
@@ -69,9 +86,20 @@ export default class App extends Component {
         <Search
           onSearch={this.onSearchHandler}
         />
-        {spinner}
-        {errorMessage}
-        {content}
+        <section className="movies">
+          {spinner}
+          {errorMessage}
+          {content}
+        </section>
+        {isValidData && (
+          <Pagination
+            current={page}
+            total={totalResults}
+            pageSize={20}
+            showSizeChanger={false}
+            onChange={this.onPaginationChange}
+          />
+        )}
       </div>
     );
   }

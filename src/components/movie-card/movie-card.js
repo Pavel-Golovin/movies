@@ -50,12 +50,13 @@ const MovieCard = (props) => {
 }
 
 MovieCard.defaultProps = {
-  overview: null
+  overview: null,
+  posterPath: null
 }
 
 MovieCard.propTypes = {
   title: PropTypes.string.isRequired,
-  posterPath: PropTypes.string.isRequired,
+  posterPath: PropTypes.string,
   overview: PropTypes.string,
   releaseDate: PropTypes.string.isRequired
 }

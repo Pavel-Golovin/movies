@@ -1,0 +1,16 @@
+.search {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 12px;
+    font-size: 18px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search:active,
+.search:hover,
+.search:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px #1890FF;
+}

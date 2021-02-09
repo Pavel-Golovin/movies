@@ -6,14 +6,12 @@
   min-width: 420px;
   max-width: 1010px;
   min-height: 100vh;
-  padding-left: 35px;
-  padding-right: 35px;
+  padding: 20px 35px 10px;
 }
 
 .ant-alert {
-  margin: auto;
+  margin-top: 20px;
   border: 5px solid darkgreen;
-  width: 500px;
 }
 
 .ant-alert .ant-alert-message {
@@ -41,6 +39,11 @@
 
 .ant-spin-text {
   margin-top: 20px;
+}
+
+.ant-pagination {
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @media screen and (max-width: 480px) {
