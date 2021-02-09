@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Spin, Alert} from "antd";
+import { debounce } from 'lodash';
 import 'antd/dist/antd.css';
 import ApiServices from '../../services/api-services';
 import MoviesList from "../movies-list";
@@ -32,11 +33,7 @@ export default class App extends Component {
     })
   }
   
-  updateMovies = (query) => {
-    this.apiServices.getMoviesBySearch(query).then(this.onMoviesLoaded).catch(this.onError);
-  }
-  
-  onSearchHandler = (query) => {
+  onSearchHandler = debounce((query) => {
     if (query === "") {
       this.setState({
         isLoading: false,
@@ -50,6 +47,10 @@ export default class App extends Component {
       })
       this.updateMovies(query);
     }
+  }, 500);
+  
+  updateMovies = (query) => {
+    this.apiServices.getMoviesBySearch(query).then(this.onMoviesLoaded).catch(this.onError);
   }
 
   render() {
