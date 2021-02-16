@@ -1,24 +1,22 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './search.css'
+import './search.css';
 
 export default class Search extends Component {
-  
   state = {
-    value: ""
-  }
-  
+    value: '',
+  };
+
   onSearchChange = (evt) => {
-    const {value} = evt.target;
-    const {onSearch} = this.props;
-    this.setState({value});
+    const { value } = evt.target;
+    const { onSearch } = this.props;
+    this.setState({ value });
     onSearch(value);
-  }
-  
+  };
+
   render() {
-    
-    const { value } = this.state
-    
+    const { value } = this.state;
+
     return (
       <input
         className="search"
@@ -29,12 +27,12 @@ export default class Search extends Component {
       />
     );
   }
-};
+}
 
 Search.defaultProps = {
-  onSearch: () => {}
-}
+  onSearch: () => {},
+};
 
 Search.propTypes = {
-  onSearch: PropTypes.func
-}
+  onSearch: PropTypes.func,
+};
