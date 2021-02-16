@@ -4,10 +4,14 @@ export default class ApiServices {
   apiKey = 'api_key=0ba2480afffac1ffe260d6bed0c6fb99';
 
   getResponse = async (url) => {
-    const response = await fetch(url);
+    const response = await fetch(url).catch(() => {
+      throw new Error(`Failed to fetch. Check your internet connection`);
+    });
+
     if (!response.ok) {
       throw new Error(`The URL ${url} can not be fetched, received ${response.status}`);
     }
+
     const body = await response.json();
     return body;
   };

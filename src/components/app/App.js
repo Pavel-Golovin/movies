@@ -18,12 +18,14 @@ export default class App extends Component {
     page: null,
     search: null,
     totalResults: null,
+    textError: null,
   };
 
-  onError = () => {
+  onError = (err) => {
     this.setState({
       isLoading: false,
       isError: true,
+      textError: err.message,
     });
   };
 
@@ -42,12 +44,14 @@ export default class App extends Component {
       this.setState({
         isLoading: false,
         isError: false,
+        textError: null,
         hasData: false,
       });
     } else {
       this.setState({
         isLoading: true,
         isError: false,
+        textError: null,
         search: query,
       });
       this.updateMovies(query);
@@ -59,6 +63,7 @@ export default class App extends Component {
     this.setState({
       isLoading: true,
       isError: false,
+      textError: null,
       page,
     });
 
@@ -70,13 +75,11 @@ export default class App extends Component {
   };
 
   render() {
-    const { moviesList, isLoading, isError, hasData, page, totalResults } = this.state;
+    const { moviesList, isLoading, isError, hasData, page, totalResults, textError } = this.state;
 
     const isValidData = hasData && !isLoading && !isError;
 
-    const errorMessage = isError ? (
-      <Alert type="error" message="Error" description="The movie can not be uploaded" showIcon />
-    ) : null;
+    const errorMessage = isError ? <Alert type="error" message="Error" description={textError} showIcon /> : null;
     const spinner = isLoading ? <Spin tip="Loading... Please wait" size="large" /> : null;
     const content = isValidData ? <MoviesList moviesList={moviesList} /> : null;
 
