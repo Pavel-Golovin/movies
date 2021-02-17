@@ -4,12 +4,48 @@
     height: 281px;
     box-shadow: 4px 4px 11px -1px rgba(34, 60, 80, 0.2);
     display: flex;
-    padding-right: 20px;
+    padding-right: 6px;
     overflow: hidden;
 }
 
 .film-card__info {
+    position: relative;
     margin-left: 20px;
+    padding-top: 12px;
+}
+
+.film-card__title {
+    padding-right: 30px;
+}
+
+.film-card__mark {
+    display: flex;
+    position: absolute;
+    top: 12px;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #000000;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.film-card__mark--low {
+    border: 3px solid #E90000;
+}
+
+.film-card__mark--middle {
+    border: 3px solid #E97E00;
+}
+
+.film-card__mark--high {
+    border: 3px solid #E9D100;
+}
+
+.film-card__mark--top {
+    border: 3px solid #66E900;
 }
 
 .film-card__genre {
@@ -33,6 +69,7 @@
 
 .film-card__annotation {
     margin: 0;
+    padding-right: 14px;
 }
 
 .film-card__release {
@@ -58,7 +95,7 @@
     .film-card__info {
       margin-left: 0;
     }
-    .film-card__rating,
+    .film-card__title,
     .film-card__release,
     .film-card__genre {
       margin-left: 73px;
