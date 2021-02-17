@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spin, Alert, Pagination } from 'antd';
+import { Spin, Alert, Pagination, Tabs } from 'antd';
 import { debounce } from 'lodash';
 import 'antd/dist/antd.css';
 import ApiServices from '../../services/api-services';
@@ -8,6 +8,8 @@ import Search from '../search/search';
 import './app.css';
 
 export default class App extends Component {
+  /* eslint-disable */
+
   apiServices = new ApiServices();
 
   state = {
@@ -19,7 +21,13 @@ export default class App extends Component {
     search: null,
     totalResults: null,
     textError: null,
+    sessionId: null,
+    isTabRated: false,
   };
+
+  componentDidMount() {
+    this.apiServices.getGuestSessionId().then((sessionId) => this.setState({ sessionId }));
+  }
 
   onError = (err) => {
     this.setState({
@@ -74,8 +82,28 @@ export default class App extends Component {
     this.apiServices.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   };
 
+  onTabToggle = (activeTab) => {
+    const { isTabRated } = this.state;
+    if (activeTab === 'Rated') {
+      this.setState({ isTabRated: true });
+    } else {
+      this.setState({ isTabRated: false });
+    }
+  };
+
   render() {
-    const { moviesList, isLoading, isError, hasData, page, totalResults, textError } = this.state;
+    const {
+      moviesList,
+      isLoading,
+      isError,
+      hasData,
+      page,
+      totalResults,
+      textError,
+      sessionId,
+      isTabRated,
+    } = this.state;
+    const { TabPane } = Tabs;
 
     const isValidData = hasData && !isLoading && !isError;
 
@@ -85,8 +113,17 @@ export default class App extends Component {
 
     return (
       <div className="app">
-        <h1 className="visually-hidden">Movies App</h1>
-        <Search onSearch={this.onSearchHandler} />
+        <Tabs
+          defaultActiveKey="Search"
+          size="large"
+          activeKey={isTabRated ? 'Rated' : 'Search'}
+          onChange={this.onTabToggle}
+          centered
+        >
+          <TabPane tab="Search" key="Search" />
+          <TabPane tab="Rated" key="Rated" />
+        </Tabs>
+        {!isTabRated ? <Search onSearch={this.onSearchHandler} /> : null}
         <section className="movies">
           {spinner}
           {errorMessage}
