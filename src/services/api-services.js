@@ -1,7 +1,7 @@
 export default class ApiServices {
   apiBase = 'https://api.themoviedb.org/3/';
 
-  apiKey = 'api_key=0ba2480afffac1ffe260d6bed0c6fb99';
+  apiKey = '0ba2480afffac1ffe260d6bed0c6fb99';
 
   getResponse = async (url) => {
     const response = await fetch(url).catch(() => {
@@ -17,7 +17,7 @@ export default class ApiServices {
   };
 
   getMoviesBySearch = async (query, page = 1) => {
-    const url = `${this.apiBase}search/movie?${this.apiKey}&language=en-US&query=${query}&page=${page}&include_adult=false`;
+    const url = `${this.apiBase}search/movie?api_key=${this.apiKey}&language=en-US&query=${query}&page=${page}&include_adult=false`;
     const response = await this.getResponse(url);
 
     if (response.results.length === 0) {
@@ -25,5 +25,11 @@ export default class ApiServices {
     }
 
     return response;
+  };
+
+  getGuestSessionId = async () => {
+    const url = `${this.apiBase}authentication/guest_session/new?api_key=${this.apiKey}`;
+    const { guest_session_id: guestSessionId } = await this.getResponse(url);
+    return guestSessionId;
   };
 }
