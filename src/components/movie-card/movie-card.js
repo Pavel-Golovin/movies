@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { GenreConsumer } from '../genre-context';
 import './movie-card.css';
 import noPoster from '../../images/no-poster.png';
 
@@ -20,30 +21,39 @@ const MovieCard = (props) => {
     }
   };
 
-  const { releaseDate, title, posterPath, overview } = props;
+  const { releaseDate, title, posterPath, overview, genreIds } = props;
 
   const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
   const posterImg = posterPath ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
 
   return (
-    <article className="film-card">
-      <div className="film-card__poster">
-        <img className="film-card__poster-img" src={posterImg} alt="This is poster" />
-      </div>
-      <div className="film-card__info">
-        <div className="film-card__rating">
-          <h2 className="film-card__title">{title}</h2>
-        </div>
+    <GenreConsumer>
+      {(genresObj) => {
+        const genresItems = genreIds.map((id) => (
+          <li key={id} className="film-card__genre-item">
+            {genresObj[id]}
+          </li>
+        ));
 
-        <p className="film-card__release">{formattedReleaseDate}</p>
+        return (
+          <article className="film-card">
+            <div className="film-card__poster">
+              <img className="film-card__poster-img" src={posterImg} alt="This is poster" />
+            </div>
+            <div className="film-card__info">
+              <div className="film-card__rating">
+                <h2 className="film-card__title">{title}</h2>
+              </div>
 
-        <ul className="film-card__genre">
-          <li className="film-card__genre-item">Action</li>
-          <li className="film-card__genre-item">Drama</li>
-        </ul>
-        <p className="film-card__annotation">{reduceText(overview)}</p>
-      </div>
-    </article>
+              <p className="film-card__release">{formattedReleaseDate}</p>
+
+              <ul className="film-card__genre">{genresItems}</ul>
+              <p className="film-card__annotation">{reduceText(overview)}</p>
+            </div>
+          </article>
+        );
+      }}
+    </GenreConsumer>
   );
 };
 
@@ -57,6 +67,7 @@ MovieCard.propTypes = {
   posterPath: PropTypes.string,
   overview: PropTypes.string,
   releaseDate: PropTypes.string.isRequired,
+  genreIds: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default MovieCard;

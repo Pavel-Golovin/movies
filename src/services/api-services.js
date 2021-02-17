@@ -32,4 +32,10 @@ export default class ApiServices {
     const { guest_session_id: guestSessionId } = await this.getResponse(url);
     return guestSessionId;
   };
+
+  getGenreList = async () => {
+    const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=0ba2480afffac1ffe260d6bed0c6fb99&language=en-US`;
+    const { genres: genresList } = await this.getResponse(url);
+    return genresList;
+  };
 }

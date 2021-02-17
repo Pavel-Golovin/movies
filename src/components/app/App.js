@@ -3,13 +3,12 @@ import { Spin, Alert, Pagination, Tabs } from 'antd';
 import { debounce } from 'lodash';
 import 'antd/dist/antd.css';
 import ApiServices from '../../services/api-services';
+import { GenreProvider } from '../genre-context';
 import MoviesList from '../movies-list';
 import Search from '../search/search';
 import './app.css';
 
 export default class App extends Component {
-  /* eslint-disable */
-
   apiServices = new ApiServices();
 
   state = {
@@ -22,11 +21,16 @@ export default class App extends Component {
     totalResults: null,
     textError: null,
     sessionId: null,
+    genresObj: null,
     isTabRated: false,
   };
 
   componentDidMount() {
     this.apiServices.getGuestSessionId().then((sessionId) => this.setState({ sessionId }));
+    this.apiServices.getGenreList().then((genresList) => {
+      const genresObj = genresList.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.name }), {});
+      this.setState({ genresObj });
+    });
   }
 
   onError = (err) => {
@@ -83,7 +87,6 @@ export default class App extends Component {
   };
 
   onTabToggle = (activeTab) => {
-    const { isTabRated } = this.state;
     if (activeTab === 'Rated') {
       this.setState({ isTabRated: true });
     } else {
@@ -100,13 +103,13 @@ export default class App extends Component {
       page,
       totalResults,
       textError,
-      sessionId,
+      sessionId, // eslint-disable-line
+      genresObj,
       isTabRated,
     } = this.state;
     const { TabPane } = Tabs;
 
     const isValidData = hasData && !isLoading && !isError;
-
     const errorMessage = isError ? <Alert type="error" message="Error" description={textError} showIcon /> : null;
     const spinner = isLoading ? <Spin tip="Loading... Please wait" size="large" /> : null;
     const content = isValidData ? <MoviesList moviesList={moviesList} /> : null;
@@ -125,9 +128,11 @@ export default class App extends Component {
         </Tabs>
         {!isTabRated ? <Search onSearch={this.onSearchHandler} /> : null}
         <section className="movies">
-          {spinner}
-          {errorMessage}
-          {content}
+          <GenreProvider value={genresObj}>
+            {spinner}
+            {errorMessage}
+            {content}
+          </GenreProvider>
         </section>
         {isValidData && (
           <Pagination
