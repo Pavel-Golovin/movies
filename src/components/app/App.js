@@ -113,6 +113,7 @@ export default class App extends Component {
       genresObj,
       isTabRated,
     } = this.state;
+
     const { TabPane } = Tabs;
 
     const isValidData = hasData && !isLoading && !isError;

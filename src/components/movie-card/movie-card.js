@@ -10,16 +10,16 @@ import noPoster from '../../images/no-poster.png';
 export default class MovieCard extends Component {
   static defaultProps = {
     overview: null,
-    posterPath: null,
+    poster_path: null,
   };
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    posterPath: PropTypes.string,
+    poster_path: PropTypes.string,
     overview: PropTypes.string,
-    releaseDate: PropTypes.string.isRequired,
-    genreIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-    voteAverage: PropTypes.number.isRequired,
+    release_date: PropTypes.string.isRequired,
+    genre_ids: PropTypes.arrayOf(PropTypes.number).isRequired,
+    vote_average: PropTypes.number.isRequired,
   };
 
   // eslint-disable-next-line consistent-return
@@ -39,7 +39,14 @@ export default class MovieCard extends Component {
   };
 
   render() {
-    const { releaseDate, title, posterPath, overview, genreIds, voteAverage } = this.props;
+    const {
+      release_date: releaseDate,
+      title,
+      poster_path: posterPath,
+      overview,
+      genre_ids: genreIds,
+      vote_average: voteAverage,
+    } = this.props;
 
     const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
     const posterImg = posterPath ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
