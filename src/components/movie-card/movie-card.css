@@ -80,13 +80,25 @@
     width: 187px;
 }
 
+.film-card__stars {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 239px;
+    padding: 12px 0 12px;
+}
+
+.ant-rate .ant-rate-star {
+    margin-right: 3px;
+}
+
 @media screen and (max-width: 995px) {
   .film-card {
     width: 100%;
   }
 }
 
-@media screen and (max-width: 421px) {
+@media screen and (max-width: 520px) {
     .film-card__poster-img {
       position: absolute;
         width: 60px;
