@@ -1,17 +1,18 @@
 import { format } from 'date-fns';
-import React from 'react';
+import React, { Component } from 'react';
+import { Rate } from 'antd';
 import PropTypes from 'prop-types';
 import { GenreConsumer } from '../genre-context';
 import './movie-card.css';
 import noPoster from '../../images/no-poster.png';
 
-const MovieCard = (props) => {
+export default class MovieCard extends Component {
   // eslint-disable-next-line consistent-return
-  const reduceText = (text) => {
-    if (text.length <= 150) {
+  reduceText = (text) => {
+    if (text.length <= 100) {
       return text;
     }
-    for (let i = 150; i > 0; i--) {
+    for (let i = 100; i > 0; i--) {
       if (
         text.charAt(i) === ' ' &&
         (text.charAt(i - 1) !== ',' || text.charAt(i - 1) !== '.' || text.charAt(i - 1) !== ';')
@@ -22,7 +23,7 @@ const MovieCard = (props) => {
   };
 
   // eslint-disable-next-line consistent-return
-  const setClassNameToMark = (voteAverage) => {
+  setClassNameToMark = (voteAverage) => {
     if (voteAverage < 3) {
       return 'film-card__mark film-card__mark--low';
     }
@@ -37,37 +38,40 @@ const MovieCard = (props) => {
     }
   };
 
-  const { releaseDate, title, posterPath, overview, genreIds, voteAverage } = props;
+  render() {
+    const { releaseDate, title, posterPath, overview, genreIds, voteAverage } = this.props;
 
-  const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
-  const posterImg = posterPath ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
+    const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
+    const posterImg = posterPath ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
 
-  return (
-    <GenreConsumer>
-      {(genresObj) => {
-        const genresItems = genreIds.map((id) => (
-          <li key={id} className="film-card__genre-item">
-            {genresObj[id]}
-          </li>
-        ));
-        return (
-          <article className="film-card">
-            <div className="film-card__poster">
-              <img className="film-card__poster-img" src={posterImg} alt="This is poster" />
-            </div>
-            <div className="film-card__info">
-              <h2 className="film-card__title">{title}</h2>
-              <span className={setClassNameToMark(voteAverage)}>{voteAverage}</span>
-              <p className="film-card__release">{formattedReleaseDate}</p>
-              <ul className="film-card__genre">{genresItems}</ul>
-              <p className="film-card__annotation">{reduceText(overview)}</p>
-            </div>
-          </article>
-        );
-      }}
-    </GenreConsumer>
-  );
-};
+    return (
+      <GenreConsumer>
+        {(genresObj) => {
+          const genresItems = genreIds.map((id) => (
+            <li key={id} className="film-card__genre-item">
+              {genresObj[id]}
+            </li>
+          ));
+          return (
+            <article className="film-card">
+              <div className="film-card__poster">
+                <img className="film-card__poster-img" src={posterImg} alt="This is poster" />
+              </div>
+              <div className="film-card__info">
+                <h2 className="film-card__title">{title}</h2>
+                <span className={this.setClassNameToMark(voteAverage)}>{voteAverage}</span>
+                <p className="film-card__release">{formattedReleaseDate}</p>
+                <ul className="film-card__genre">{genresItems}</ul>
+                <p className="film-card__annotation">{this.reduceText(overview)}</p>
+                <Rate className="film-card__stars" count="10" allowHalf />
+              </div>
+            </article>
+          );
+        }}
+      </GenreConsumer>
+    );
+  }
+}
 
 MovieCard.defaultProps = {
   overview: null,
@@ -82,5 +86,3 @@ MovieCard.propTypes = {
   genreIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   voteAverage: PropTypes.number.isRequired,
 };
-
-export default MovieCard;
