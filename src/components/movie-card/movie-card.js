@@ -22,10 +22,6 @@ export default class MovieCard extends Component {
     voteAverage: PropTypes.number.isRequired,
   };
 
-  onRateChange = (num) => {
-    console.log(num);
-  };
-
   // eslint-disable-next-line consistent-return
   setClassNameToMark = (voteAverage) => {
     if (voteAverage < 3) {
@@ -67,7 +63,7 @@ export default class MovieCard extends Component {
                 <p className="film-card__release">{formattedReleaseDate}</p>
                 <ul className="film-card__genre">{genresItems}</ul>
                 <p className="film-card__annotation">{reduceText(overview)}</p>
-                <Rate className="film-card__stars" count="10" allowHalf onChange={this.onRateChange} />
+                <Rate className="film-card__stars" count="10" allowHalf />
               </div>
             </article>
           );

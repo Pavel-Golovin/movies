@@ -1,5 +1,5 @@
+// eslint-disable-next-line consistent-return
 const reduceText = (text) => {
-  // eslint-disable-line consistent-return
   if (text.length <= 100) {
     return text;
   }

@@ -5,29 +5,11 @@ import './movies-list.css';
 
 const MoviesList = (props) => {
   const { moviesList } = props;
-  const elements = moviesList.map(
-    ({
-      id,
-      title,
-      poster_path: posterPath,
-      release_date: releaseDate,
-      overview,
-      genre_ids: genreIds,
-      vote_average: voteAverage,
-    }) => (
-      <li className="movies__item" key={id}>
-        <MovieCard
-          title={title}
-          posterPath={posterPath}
-          overview={overview}
-          releaseDate={releaseDate}
-          genreIds={genreIds}
-          voteAverage={voteAverage}
-        />
-      </li>
-    )
-  );
-
+  const elements = moviesList.map(({ id, ...otherProps }) => (
+    <li className="movies__item" key={id}>
+      <MovieCard id={id} {...otherProps} />
+    </li>
+  ));
   return <ul className="app__list movies">{elements}</ul>;
 };
 
