@@ -5,9 +5,9 @@ import './movies-list.css';
 
 const MoviesList = (props) => {
   const { moviesList } = props;
-  const elements = moviesList.map(({ id, ...otherProps }) => (
-    <li className="movies__item" key={id}>
-      <MovieCard id={id} {...otherProps} />
+  const elements = moviesList.map((movie) => (
+    <li className="movies__item" key={movie.id}>
+      <MovieCard movie={movie} />
     </li>
   ));
   return <ul className="app__list movies">{elements}</ul>;
