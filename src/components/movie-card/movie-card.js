@@ -3,23 +3,27 @@ import React, { Component } from 'react';
 import { Rate } from 'antd';
 import PropTypes from 'prop-types';
 import { GenreConsumer } from '../genre-context';
+import reduceText from '../../utils/reduce-text';
 import './movie-card.css';
 import noPoster from '../../images/no-poster.png';
 
 export default class MovieCard extends Component {
-  // eslint-disable-next-line consistent-return
-  reduceText = (text) => {
-    if (text.length <= 100) {
-      return text;
-    }
-    for (let i = 100; i > 0; i--) {
-      if (
-        text.charAt(i) === ' ' &&
-        (text.charAt(i - 1) !== ',' || text.charAt(i - 1) !== '.' || text.charAt(i - 1) !== ';')
-      ) {
-        return `${text.substring(0, i)}...`;
-      }
-    }
+  static defaultProps = {
+    overview: null,
+    posterPath: null,
+  };
+
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    posterPath: PropTypes.string,
+    overview: PropTypes.string,
+    releaseDate: PropTypes.string.isRequired,
+    genreIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+    voteAverage: PropTypes.number.isRequired,
+  };
+
+  onRateChange = (num) => {
+    console.log(num);
   };
 
   // eslint-disable-next-line consistent-return
@@ -62,8 +66,8 @@ export default class MovieCard extends Component {
                 <span className={this.setClassNameToMark(voteAverage)}>{voteAverage}</span>
                 <p className="film-card__release">{formattedReleaseDate}</p>
                 <ul className="film-card__genre">{genresItems}</ul>
-                <p className="film-card__annotation">{this.reduceText(overview)}</p>
-                <Rate className="film-card__stars" count="10" allowHalf />
+                <p className="film-card__annotation">{reduceText(overview)}</p>
+                <Rate className="film-card__stars" count="10" allowHalf onChange={this.onRateChange} />
               </div>
             </article>
           );
@@ -72,17 +76,3 @@ export default class MovieCard extends Component {
     );
   }
 }
-
-MovieCard.defaultProps = {
-  overview: null,
-  posterPath: null,
-};
-
-MovieCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  posterPath: PropTypes.string,
-  overview: PropTypes.string,
-  releaseDate: PropTypes.string.isRequired,
-  genreIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  voteAverage: PropTypes.number.isRequired,
-};
