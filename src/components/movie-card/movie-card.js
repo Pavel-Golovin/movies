@@ -8,24 +8,23 @@ import './movie-card.css';
 import noPoster from '../../images/no-poster.png';
 
 export default class MovieCard extends Component {
-  static defaultProps = {
-    overview: null,
-    poster_path: null,
-  };
-
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    poster_path: PropTypes.string,
-    overview: PropTypes.string,
-    release_date: PropTypes.string.isRequired,
-    genre_ids: PropTypes.arrayOf(PropTypes.number).isRequired,
-    vote_average: PropTypes.number.isRequired,
+    movie: PropTypes.shape({
+      id: PropTypes.number,
+      poster_path: PropTypes.string,
+      title: PropTypes.string,
+      release_date: PropTypes.string,
+      overview: PropTypes.string,
+      rating: PropTypes.number,
+      vote_average: PropTypes.number,
+      genre_ids: PropTypes.arrayOf(PropTypes.number),
+    }).isRequired,
   };
 
   // eslint-disable-next-line consistent-return
   setClassNameToMark = (voteAverage) => {
     if (voteAverage < 3) {
-      return 'film-card__mark film-card__mark--low';
+      return 'film-card__mark film-card__mark--lows';
     }
     if (voteAverage < 5) {
       return 'film-card__mark film-card__mark--middle';
@@ -40,12 +39,14 @@ export default class MovieCard extends Component {
 
   render() {
     const {
-      release_date: releaseDate,
-      title,
-      poster_path: posterPath,
-      overview,
-      genre_ids: genreIds,
-      vote_average: voteAverage,
+      movie: {
+        release_date: releaseDate,
+        title,
+        poster_path: posterPath,
+        overview,
+        genre_ids: genreIds,
+        vote_average: voteAverage,
+      },
     } = this.props;
 
     const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
