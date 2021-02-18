@@ -39,6 +39,12 @@ export default class ApiServices {
     );
   };
 
+  getGuestSessionId = async () => {
+    const url = `${this.apiBase}authentication/guest_session/new?api_key=${this.apiKey}`;
+    const { guest_session_id: guestSessionId } = await this.getResponse(url);
+    return guestSessionId;
+  };
+
   getMoviesBySearch = async (query, page = 1) => {
     const url = `${this.apiBase}search/movie?api_key=${this.apiKey}&language=en-US&query=${query}&page=${page}&include_adult=false`;
     const response = await this.getResponse(url);
@@ -50,15 +56,15 @@ export default class ApiServices {
     return response;
   };
 
-  getGuestSessionId = async () => {
-    const url = `${this.apiBase}authentication/guest_session/new?api_key=${this.apiKey}`;
-    const { guest_session_id: guestSessionId } = await this.getResponse(url);
-    return guestSessionId;
-  };
-
   getGenreList = async () => {
-    const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=0ba2480afffac1ffe260d6bed0c6fb99&language=en-US`;
+    const url = `${this.apiBase}genre/movie/list?api_key=${this.apiKey}&language=en-US`;
     const { genres: genresList } = await this.getResponse(url);
     return genresList;
+  };
+
+  getRatedMovies = async (sessionId) => {
+    const url = `${this.apiBase}guest_session/${sessionId}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`;
+    const body = await this.getResponse(url);
+    return body;
   };
 }
