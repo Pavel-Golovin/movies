@@ -16,6 +16,29 @@ export default class ApiServices {
     return body;
   };
 
+  postResponse = async (url, requestBodyValue) => {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({ value: requestBodyValue }),
+    });
+    if (!response.ok) {
+      throw new Error(`The URL ${url} can not be fetched, received ${response.status}`);
+    }
+
+    const body = await response.json();
+    return body;
+  };
+
+  postRateMovie = async (id, guestSessionId, rateValue) => {
+    await this.postResponse(
+      `${this.apiBase}movie/${id}/rating?${this.apiKey}&guest_session_id=${guestSessionId}`,
+      rateValue
+    );
+  };
+
   getMoviesBySearch = async (query, page = 1) => {
     const url = `${this.apiBase}search/movie?api_key=${this.apiKey}&language=en-US&query=${query}&page=${page}&include_adult=false`;
     const response = await this.getResponse(url);
