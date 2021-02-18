@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import { Spin, Alert, Pagination, Tabs } from 'antd';
 import { debounce } from 'lodash';
 import 'antd/dist/antd.css';
-import ApiServices from '../../services/api-services';
+import ApiAuthentication from '../../services/api-authentication';
+import ApiGenre from '../../services/api-genre';
+import ApiSearch from '../../services/api-search';
 import { GenreProvider } from '../genre-context';
 import MoviesList from '../movies-list';
 import Search from '../search/search';
 import './app.css';
 
 export default class App extends Component {
-  apiServices = new ApiServices();
+  apiAuthentication = new ApiAuthentication();
+
+  apiGenre = new ApiGenre();
+
+  apiSearch = new ApiSearch();
 
   state = {
     moviesList: [],
@@ -26,8 +32,8 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    this.apiServices.getGuestSessionId().then((sessionId) => this.setState({ sessionId }));
-    this.apiServices.getGenreList().then((genresList) => {
+    this.apiAuthentication.getGuestSessionId().then((sessionId) => this.setState({ sessionId }));
+    this.apiGenre.getGenreList().then((genresList) => {
       const genresObj = genresList.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.name }), {});
       this.setState({ genresObj });
     });
@@ -83,7 +89,7 @@ export default class App extends Component {
   };
 
   updateMovies = (query, page = 1) => {
-    this.apiServices.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
+    this.apiSearch.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   };
 
   onTabToggle = (activeTab) => {
