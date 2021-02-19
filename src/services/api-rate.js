@@ -3,7 +3,7 @@ import ApiBackend from './api-backend';
 export default class ApiRate extends ApiBackend {
   postRateMovie = async (id, guestSessionId, rateValue) => {
     await this.postResponse(
-      `${this.apiBase}movie/${id}/rating?${this.apiKey}&guest_session_id=${guestSessionId}`,
+      `${this.apiBase}movie/${id}/rating?api_key=${this.apiKey}&guest_session_id=${guestSessionId}`,
       rateValue
     );
   };
