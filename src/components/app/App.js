@@ -58,7 +58,7 @@ export default class App extends Component {
     this.setState({
       moviesList: results,
       isLoading: false,
-      hasData: true,
+      hasData: !!results.length,
       page,
       totalResults,
     });
@@ -108,7 +108,6 @@ export default class App extends Component {
   rateMovies = (page = 1) => {
     const { sessionId } = this.state;
     this.apiRate.getRatedMovies(sessionId, page).then((result) => {
-      console.log(result);
       const { results: ratedMoviesList, page, total_results: totalResultsRated } = result;
       this.setState({
         ratedMoviesList,
@@ -116,7 +115,7 @@ export default class App extends Component {
         totalResultsRated,
         isTabRated: true,
         isLoading: false,
-        hasData: true,
+        hasData: !!ratedMoviesList.length,
       });
     });
   };
@@ -147,9 +146,8 @@ export default class App extends Component {
 
     const { TabPane } = Tabs;
 
-    console.log(totalResultsRated);
-
     const isValidData = hasData && !isLoading && !isError;
+
     const errorMessage = isError ? <Alert type="error" message="Error" description={textError} showIcon /> : null;
     const spinner = isLoading ? <Spin tip="Loading... Please wait" size="large" /> : null;
     const content = isValidData ? (
