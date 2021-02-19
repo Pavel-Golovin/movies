@@ -30,6 +30,7 @@ export default class App extends Component {
     page: null,
     search: null,
     totalResults: null,
+    totalResultsRated: null,
     textError: null,
     sessionId: null,
     genresObj: null,
@@ -52,7 +53,8 @@ export default class App extends Component {
     });
   };
 
-  onMoviesLoaded = ({ results, page, total_results: totalResults }) => {
+  onMoviesLoaded = (movies) => {
+    const { results, page, total_results: totalResults } = movies;
     this.setState({
       moviesList: results,
       isLoading: false,
@@ -82,7 +84,7 @@ export default class App extends Component {
   }, 500);
 
   onPaginationChange = (page) => {
-    const { search } = this.state;
+    const { search, isTabRated } = this.state;
     this.setState({
       isLoading: true,
       isError: false,
@@ -90,23 +92,31 @@ export default class App extends Component {
       page,
     });
 
-    this.updateMovies(search, page);
+    if (isTabRated) {
+      this.rateMovies(page);
+    } else {
+      this.updateMovies(search, page);
+    }
   };
 
   updateMovies = (query, page = 1) => {
     this.apiSearch.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   };
 
-  updateRatedMovie = (id, movie, rating) => {
-    console.log(movie);
-  };
+  updateRatedMovie = (id, movie, rating) => {};
 
-  rateMovies = () => {
-    const { sessionId, ratedMoviesList } = this.state;
-    this.apiRate.getRatedMovies(sessionId).then(({ results }) => {
+  rateMovies = (page = 1) => {
+    const { sessionId } = this.state;
+    this.apiRate.getRatedMovies(sessionId, page).then((result) => {
+      console.log(result);
+      const { results: ratedMoviesList, page, total_results: totalResultsRated } = result;
       this.setState({
-        ratedMoviesList: results,
+        ratedMoviesList,
+        page,
+        totalResultsRated,
         isTabRated: true,
+        isLoading: false,
+        hasData: true,
       });
     });
   };
@@ -123,6 +133,7 @@ export default class App extends Component {
     const {
       moviesList,
       ratedMoviesList,
+      totalResultsRated,
       isLoading,
       isError,
       hasData,
@@ -135,6 +146,8 @@ export default class App extends Component {
     } = this.state;
 
     const { TabPane } = Tabs;
+
+    console.log(totalResultsRated);
 
     const isValidData = hasData && !isLoading && !isError;
     const errorMessage = isError ? <Alert type="error" message="Error" description={textError} showIcon /> : null;
@@ -170,7 +183,7 @@ export default class App extends Component {
         {isValidData && (
           <Pagination
             current={page}
-            total={totalResults}
+            total={!isTabRated ? totalResults : totalResultsRated}
             pageSize={20}
             showSizeChanger={false}
             onChange={this.onPaginationChange}

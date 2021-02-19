@@ -8,8 +8,8 @@ export default class ApiRate extends ApiBackend {
     );
   };
 
-  getRatedMovies = async (sessionId) => {
-    const url = `${this.apiBase}guest_session/${sessionId}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`;
+  getRatedMovies = async (sessionId, page = 1) => {
+    const url = `${this.apiBase}guest_session/${sessionId}/rated/movies?api_key=${this.apiKey}&page=${page}&sort_by=created_at.asc`;
     const body = await this.getResponse(url);
     return body;
   };
