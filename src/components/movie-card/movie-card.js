@@ -3,12 +3,15 @@ import React, { Component } from 'react';
 import { Rate } from 'antd';
 import PropTypes from 'prop-types';
 import { GenreConsumer } from '../genre-context';
+import ApiRate from '../../services/api-rate';
 import reduceText from '../../utils/reduce-text';
 import './movie-card.css';
 import noPoster from '../../images/no-poster.png';
 
 export default class MovieCard extends Component {
   static propTypes = {
+    sessionId: PropTypes.string.isRequired,
+    updateRatedMovie: PropTypes.func.isRequired,
     movie: PropTypes.shape({
       id: PropTypes.number,
       poster_path: PropTypes.string,
@@ -20,6 +23,8 @@ export default class MovieCard extends Component {
       genre_ids: PropTypes.arrayOf(PropTypes.number),
     }).isRequired,
   };
+
+  apiRate = new ApiRate();
 
   // eslint-disable-next-line consistent-return
   setClassNameToMark = (voteAverage) => {
@@ -37,8 +42,14 @@ export default class MovieCard extends Component {
     }
   };
 
+  onRateChange = (rateValue) => {
+    const { movie, sessionId, updateRatedMovie } = this.props;
+    this.apiRate.postRateMovie(movie.id, sessionId, rateValue).then(() => updateRatedMovie(movie.id, movie, rateValue));
+  };
+
   render() {
     const {
+      // movie,
       movie: {
         release_date: releaseDate,
         title,
@@ -71,7 +82,7 @@ export default class MovieCard extends Component {
                 <p className="film-card__release">{formattedReleaseDate}</p>
                 <ul className="film-card__genre">{genresItems}</ul>
                 <p className="film-card__annotation">{reduceText(overview)}</p>
-                <Rate className="film-card__stars" count="10" allowHalf />
+                <Rate className="film-card__stars" count="10" allowHalf onChange={this.onRateChange} />
               </div>
             </article>
           );
