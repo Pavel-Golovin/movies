@@ -5,20 +5,25 @@ import 'antd/dist/antd.css';
 import ApiAuthentication from '../../services/api-authentication';
 import ApiGenre from '../../services/api-genre';
 import ApiSearch from '../../services/api-search';
+import ApiRate from '../../services/api-rate';
 import { GenreProvider } from '../genre-context';
 import MoviesList from '../movies-list';
 import Search from '../search/search';
 import './app.css';
 
 export default class App extends Component {
+  /* eslint-disable */
   apiAuthentication = new ApiAuthentication();
 
   apiGenre = new ApiGenre();
 
   apiSearch = new ApiSearch();
 
+  apiRate = new ApiRate();
+
   state = {
     moviesList: [],
+    ratedMoviesList: [],
     isLoading: false,
     isError: false,
     hasData: false,
@@ -92,9 +97,23 @@ export default class App extends Component {
     this.apiSearch.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   };
 
+  updateRatedMovie = (id, movie, rating) => {
+    console.log(movie);
+  };
+
+  rateMovies = () => {
+    const { sessionId, ratedMoviesList } = this.state;
+    this.apiRate.getRatedMovies(sessionId).then(({ results }) => {
+      this.setState({
+        ratedMoviesList: results,
+        isTabRated: true,
+      });
+    });
+  };
+
   onTabToggle = (activeTab) => {
     if (activeTab === 'Rated') {
-      this.setState({ isTabRated: true });
+      this.rateMovies();
     } else {
       this.setState({ isTabRated: false });
     }
@@ -103,13 +122,14 @@ export default class App extends Component {
   render() {
     const {
       moviesList,
+      ratedMoviesList,
       isLoading,
       isError,
       hasData,
       page,
       totalResults,
       textError,
-      sessionId, // eslint-disable-line
+      sessionId,
       genresObj,
       isTabRated,
     } = this.state;
@@ -119,7 +139,13 @@ export default class App extends Component {
     const isValidData = hasData && !isLoading && !isError;
     const errorMessage = isError ? <Alert type="error" message="Error" description={textError} showIcon /> : null;
     const spinner = isLoading ? <Spin tip="Loading... Please wait" size="large" /> : null;
-    const content = isValidData ? <MoviesList moviesList={moviesList} /> : null;
+    const content = isValidData ? (
+      <MoviesList
+        moviesList={!isTabRated ? moviesList : ratedMoviesList}
+        sessionId={sessionId}
+        updateRatedMovie={this.updateRatedMovie}
+      />
+    ) : null;
 
     return (
       <div className="app">

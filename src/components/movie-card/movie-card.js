@@ -42,9 +42,9 @@ export default class MovieCard extends Component {
     }
   };
 
-  onRateChange = (rateValue) => {
+  onRateChange = (rating) => {
     const { movie, sessionId, updateRatedMovie } = this.props;
-    this.apiRate.postRateMovie(movie.id, sessionId, rateValue).then(() => updateRatedMovie(movie.id, movie, rateValue));
+    this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => updateRatedMovie(movie.id, movie, rating));
   };
 
   render() {
