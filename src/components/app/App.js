@@ -146,11 +146,12 @@ export default class App extends Component {
 
     const isValidDataSearch = !!moviesList.length && !isLoading && !isError;
     const isValidDataRated = !!ratedMoviesList.length && !isLoading && !isError;
-    const searchedContent = isValidDataSearch ? (
-      <MoviesList moviesList={moviesList} sessionId={sessionId} updateRatedMovie={this.updateRatedMovie} />
-    ) : null;
-    const ratedContent = isValidDataRated ? (
-      <MoviesList moviesList={ratedMoviesList} sessionId={sessionId} updateRatedMovie={this.updateRatedMovie} />
+    const content = (!isTabRated ? isValidDataSearch : isValidDataRated) ? (
+      <MoviesList
+        moviesList={!isTabRated ? moviesList : ratedMoviesList}
+        sessionId={sessionId}
+        updateRatedMovie={this.updateRatedMovie}
+      />
     ) : null;
 
     return (
@@ -170,7 +171,7 @@ export default class App extends Component {
           <GenreProvider value={genresObj}>
             {spinner}
             {errorMessage}
-            {!isTabRated ? searchedContent : ratedContent}
+            {content}
           </GenreProvider>
         </section>
         {(!isTabRated ? isValidDataSearch : isValidDataRated) && (
