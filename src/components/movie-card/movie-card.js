@@ -25,7 +25,9 @@ export default class MovieCard extends Component {
     }).isRequired,
   };
 
-  state = {};
+  state = {
+    rating: null,
+  };
 
   apiRate = new ApiRate();
 
@@ -47,14 +49,17 @@ export default class MovieCard extends Component {
 
   onRateChange = (rating) => {
     const { moviesList, movie, sessionId, updateRatedMovie } = this.props;
-    this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => updateRatedMovie(moviesList));
+    this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => {
+      updateRatedMovie(moviesList);
+      this.setState({
+        rating,
+      });
+    });
   };
 
   render() {
     const {
-      // movie,
       movie: {
-        rating,
         release_date: releaseDate,
         title,
         poster_path: posterPath,
@@ -64,9 +69,11 @@ export default class MovieCard extends Component {
       },
     } = this.props;
 
+    const { rating } = this.state;
+
     const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
     const posterImg = posterPath ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
-    const rateContent = rating ? (
+    const rateContent = !!rating ? ( // eslint-disable-line
       <Rate className="film-card__stars" count="10" allowHalf value={rating} disabled />
     ) : (
       <Rate className="film-card__stars" count="10" allowHalf onChange={this.onRateChange} />
