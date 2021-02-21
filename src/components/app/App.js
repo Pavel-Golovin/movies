@@ -100,7 +100,19 @@ export default class App extends Component {
     this.apiSearch.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   };
 
-  updateRatedMovie = (id, movie, rating) => {};
+  updateRatedMovie = () => {
+    const { moviesList, ratedMoviesList } = this.state;
+    const updatedMoviesList = moviesList.map((movie) => {
+      let updatedMovie = ratedMoviesList.filter(({ id }) => id === movie.id)[0];
+      if (typeof updatedMovie === 'undefined') {
+        updatedMovie = movie;
+      }
+      return updatedMovie;
+    });
+    this.setState({
+      moviesList: updatedMoviesList,
+    });
+  };
 
   rateMovies = (page = 1) => {
     const { sessionId } = this.state;
