@@ -74,7 +74,7 @@ export default class MovieCard extends Component {
     const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
     const posterImg = posterPath ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
     const rateContent = rating ? (
-      <Rate className="film-card__stars" count="10" allowHalf value={rating} disabled={isDisabled} />
+      <Rate className="film-card__stars" count="10" allowHalf value={rating} disabled />
     ) : (
       <Rate className="film-card__stars" count="10" allowHalf onChange={this.onRateChange} disabled={isDisabled} />
     );
