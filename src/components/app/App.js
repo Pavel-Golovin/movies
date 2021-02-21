@@ -118,16 +118,24 @@ export default class App extends Component {
 
   rateMovies = (page = 1) => {
     const { sessionId } = this.state;
-    this.apiRate.getRatedMovies(sessionId, page).then((result) => {
-      const { results: ratedMoviesList, total_results: totalResultsRated } = result;
-      this.setState({
-        ratedMoviesList,
-        page,
-        totalResultsRated,
-        isTabRated: true,
-        isLoading: false,
-      });
+    this.setState({
+      isLoading: true,
+      isError: false,
     });
+    this.apiRate
+      .getRatedMovies(sessionId, page)
+      .then((result) => {
+        const { results: ratedMoviesList, total_results: totalResultsRated } = result;
+        this.setState({
+          ratedMoviesList,
+          page,
+          totalResultsRated,
+          isTabRated: true,
+          isLoading: false,
+          isError: false,
+        });
+      })
+      .catch(this.onError);
   };
 
   onTabToggle = (activeTab) => {

@@ -11,7 +11,7 @@ import noPoster from '../../images/no-poster.png';
 export default class MovieCard extends Component {
   static propTypes = {
     sessionId: PropTypes.string.isRequired,
-    updateRatedMovie: PropTypes.func.isRequired,
+    updateMoviesList: PropTypes.func.isRequired,
     moviesList: PropTypes.arrayOf(PropTypes.object).isRequired,
     movie: PropTypes.shape({
       id: PropTypes.number,
@@ -48,10 +48,10 @@ export default class MovieCard extends Component {
   };
 
   onRateChange = (rating) => {
-    const { moviesList, movie, sessionId, updateRatedMovie } = this.props;
+    const { moviesList, movie, sessionId, updateMoviesList } = this.props;
     this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => {
       this.setState({ isDisabled: true });
-      updateRatedMovie(moviesList);
+      updateMoviesList(moviesList);
     });
   };
 

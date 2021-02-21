@@ -4,10 +4,10 @@ import MovieCard from '../movie-card';
 import './movies-list.css';
 
 const MoviesList = (props) => {
-  const { moviesList, sessionId, updateRatedMovie } = props;
+  const { moviesList, sessionId, updateMoviesList } = props;
   const elements = moviesList.map((movie) => (
     <li className="movies__item" key={movie.id}>
-      <MovieCard movie={movie} moviesList={moviesList} sessionId={sessionId} updateRatedMovie={updateRatedMovie} />
+      <MovieCard movie={movie} moviesList={moviesList} sessionId={sessionId} updateMoviesList={updateMoviesList} />
     </li>
   ));
   return <ul className="app__list movies">{elements}</ul>;
@@ -21,7 +21,7 @@ MoviesList.defaultProps = {
 MoviesList.propTypes = {
   moviesList: PropTypes.arrayOf(PropTypes.object),
   sessionId: PropTypes.string,
-  updateRatedMovie: PropTypes.func.isRequired,
+  updateMoviesList: PropTypes.func.isRequired,
 };
 
 export default MoviesList;
