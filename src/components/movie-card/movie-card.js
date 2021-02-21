@@ -12,6 +12,7 @@ export default class MovieCard extends Component {
   static propTypes = {
     sessionId: PropTypes.string.isRequired,
     updateRatedMovie: PropTypes.func.isRequired,
+    moviesList: PropTypes.arrayOf(PropTypes.object).isRequired,
     movie: PropTypes.shape({
       id: PropTypes.number,
       poster_path: PropTypes.string,
@@ -43,8 +44,8 @@ export default class MovieCard extends Component {
   };
 
   onRateChange = (rating) => {
-    const { movie, sessionId, updateRatedMovie } = this.props;
-    this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => updateRatedMovie(movie.id, movie, rating));
+    const { moviesList, movie, sessionId, updateRatedMovie } = this.props;
+    this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => updateRatedMovie(moviesList));
   };
 
   render() {

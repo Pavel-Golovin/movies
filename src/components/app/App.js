@@ -12,7 +12,6 @@ import Search from '../search/search';
 import './app.css';
 
 export default class App extends Component {
-  /* eslint-disable */
   apiAuthentication = new ApiAuthentication();
 
   apiGenre = new ApiGenre();
@@ -54,8 +53,10 @@ export default class App extends Component {
 
   onMoviesLoaded = (movies) => {
     const { results, page, total_results: totalResults } = movies;
+    const updatedResults = this.updateRatedMovie(results);
+
     this.setState({
-      moviesList: results,
+      moviesList: updatedResults,
       isLoading: false,
       page,
       totalResults,
@@ -100,9 +101,9 @@ export default class App extends Component {
     this.apiSearch.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   };
 
-  updateRatedMovie = () => {
-    const { moviesList, ratedMoviesList } = this.state;
-    const updatedMoviesList = moviesList.map((movie) => {
+  updateRatedMovie = (movies) => {
+    const { ratedMoviesList } = this.state;
+    const updatedMoviesList = movies.map((movie) => {
       let updatedMovie = ratedMoviesList.filter(({ id }) => id === movie.id)[0];
       if (typeof updatedMovie === 'undefined') {
         updatedMovie = movie;
@@ -112,12 +113,13 @@ export default class App extends Component {
     this.setState({
       moviesList: updatedMoviesList,
     });
+    return updatedMoviesList;
   };
 
   rateMovies = (page = 1) => {
     const { sessionId } = this.state;
     this.apiRate.getRatedMovies(sessionId, page).then((result) => {
-      const { results: ratedMoviesList, page, total_results: totalResultsRated } = result;
+      const { results: ratedMoviesList, total_results: totalResultsRated } = result;
       this.setState({
         ratedMoviesList,
         page,

@@ -7,7 +7,7 @@ const MoviesList = (props) => {
   const { moviesList, sessionId, updateRatedMovie } = props;
   const elements = moviesList.map((movie) => (
     <li className="movies__item" key={movie.id}>
-      <MovieCard movie={movie} sessionId={sessionId} updateRatedMovie={updateRatedMovie} />
+      <MovieCard movie={movie} moviesList={moviesList} sessionId={sessionId} updateRatedMovie={updateRatedMovie} />
     </li>
   ));
   return <ul className="app__list movies">{elements}</ul>;
