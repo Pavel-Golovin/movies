@@ -27,6 +27,10 @@ export default class MovieCard extends Component {
 
   apiRate = new ApiRate();
 
+  state = {
+    isDisabled: false,
+  };
+
   // eslint-disable-next-line consistent-return
   setClassNameToMark = (voteAverage) => {
     if (voteAverage < 3) {
@@ -45,7 +49,10 @@ export default class MovieCard extends Component {
 
   onRateChange = (rating) => {
     const { moviesList, movie, sessionId, updateRatedMovie } = this.props;
-    this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => updateRatedMovie(moviesList));
+    this.apiRate.postRateMovie(movie.id, sessionId, rating).then(() => {
+      this.setState({ isDisabled: true });
+      updateRatedMovie(moviesList);
+    });
   };
 
   render() {
@@ -62,12 +69,14 @@ export default class MovieCard extends Component {
       },
     } = this.props;
 
+    const { isDisabled } = this.state;
+
     const formattedReleaseDate = releaseDate ? format(new Date(releaseDate), 'MMMM d, yyyy') : '';
     const posterImg = posterPath ? `https://image.tmdb.org/t/p/w185${posterPath}` : noPoster;
     const rateContent = rating ? (
-      <Rate className="film-card__stars" count="10" allowHalf value={rating} onChange={this.onRateChange} />
+      <Rate className="film-card__stars" count="10" allowHalf value={rating} disabled={isDisabled} />
     ) : (
-      <Rate className="film-card__stars" count="10" allowHalf onChange={this.onRateChange} />
+      <Rate className="film-card__stars" count="10" allowHalf onChange={this.onRateChange} disabled={isDisabled} />
     );
 
     return (
