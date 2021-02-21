@@ -15,11 +15,12 @@ const MoviesList = (props) => {
 
 MoviesList.defaultProps = {
   moviesList: [],
+  sessionId: '',
 };
 
 MoviesList.propTypes = {
   moviesList: PropTypes.arrayOf(PropTypes.object),
-  sessionId: PropTypes.string.isRequired,
+  sessionId: PropTypes.string,
   updateRatedMovie: PropTypes.func.isRequired,
 };
 

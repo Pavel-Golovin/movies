@@ -26,7 +26,6 @@ export default class App extends Component {
     ratedMoviesList: [],
     isLoading: false,
     isError: false,
-    hasData: false,
     page: null,
     search: null,
     totalResults: null,
@@ -58,7 +57,6 @@ export default class App extends Component {
     this.setState({
       moviesList: results,
       isLoading: false,
-      hasData: !!results.length,
       page,
       totalResults,
     });
@@ -70,7 +68,6 @@ export default class App extends Component {
         isLoading: false,
         isError: false,
         textError: null,
-        hasData: false,
       });
     } else {
       this.setState({
@@ -115,7 +112,6 @@ export default class App extends Component {
         totalResultsRated,
         isTabRated: true,
         isLoading: false,
-        hasData: !!ratedMoviesList.length,
       });
     });
   };
@@ -135,7 +131,6 @@ export default class App extends Component {
       totalResultsRated,
       isLoading,
       isError,
-      hasData,
       page,
       totalResults,
       textError,
@@ -146,16 +141,16 @@ export default class App extends Component {
 
     const { TabPane } = Tabs;
 
-    const isValidData = hasData && !isLoading && !isError;
-
     const errorMessage = isError ? <Alert type="error" message="Error" description={textError} showIcon /> : null;
     const spinner = isLoading ? <Spin tip="Loading... Please wait" size="large" /> : null;
-    const content = isValidData ? (
-      <MoviesList
-        moviesList={!isTabRated ? moviesList : ratedMoviesList}
-        sessionId={sessionId}
-        updateRatedMovie={this.updateRatedMovie}
-      />
+
+    const isValidDataSearch = !!moviesList.length && !isLoading && !isError;
+    const isValidDataRated = !!ratedMoviesList.length && !isLoading && !isError;
+    const searchedContent = isValidDataSearch ? (
+      <MoviesList moviesList={moviesList} sessionId={sessionId} updateRatedMovie={this.updateRatedMovie} />
+    ) : null;
+    const ratedContent = isValidDataRated ? (
+      <MoviesList moviesList={ratedMoviesList} sessionId={sessionId} updateRatedMovie={this.updateRatedMovie} />
     ) : null;
 
     return (
@@ -175,10 +170,10 @@ export default class App extends Component {
           <GenreProvider value={genresObj}>
             {spinner}
             {errorMessage}
-            {content}
+            {!isTabRated ? searchedContent : ratedContent}
           </GenreProvider>
         </section>
-        {isValidData && (
+        {(!isTabRated ? isValidDataSearch : isValidDataRated) && (
           <Pagination
             current={page}
             total={!isTabRated ? totalResults : totalResultsRated}
