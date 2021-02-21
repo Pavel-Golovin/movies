@@ -53,7 +53,7 @@ export default class App extends Component {
 
   onMoviesLoaded = (movies) => {
     const { results, page, total_results: totalResults } = movies;
-    const updatedResults = this.updateRatedMovie(results);
+    const updatedResults = this.updateMoviesList(results);
 
     this.setState({
       moviesList: updatedResults,
@@ -101,7 +101,7 @@ export default class App extends Component {
     this.apiSearch.getMoviesBySearch(query, page).then(this.onMoviesLoaded).catch(this.onError);
   };
 
-  updateRatedMovie = (movies) => {
+  updateMoviesList = (movies) => {
     const { ratedMoviesList } = this.state;
     const updatedMoviesList = movies.map((movie) => {
       let updatedMovie = ratedMoviesList.filter(({ id }) => id === movie.id)[0];
@@ -164,7 +164,7 @@ export default class App extends Component {
       <MoviesList
         moviesList={!isTabRated ? moviesList : ratedMoviesList}
         sessionId={sessionId}
-        updateRatedMovie={this.updateRatedMovie}
+        updateMoviesList={this.updateMoviesList}
       />
     ) : null;
 
